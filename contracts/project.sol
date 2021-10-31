@@ -5,23 +5,23 @@ Project[] public projects; // same as beneficiary
 
 struct Project{
 	uint projectID;
-string name;
-string description;
-uint requiredAmount;
-uint DAPPtokenBalance;
-address Address;
-bool complete;
+    string name;
+    string description;
+    uint requiredAmount;
+    uint DAPPtokenBalance;
+    address Address;
+    bool completed;
 }
 
-function createProject(string myName, string myDescription, uint amount) public {
+function createProject(string memory myName, string memory myDescription, uint amount) public {
 Project memory d = Project(
-{ name:myName, 
+    {  projectID:projects.length,
+       name:myName, 
 	   description:myDescription,
 	   requiredAmount:amount,
-	   completed:false,
-   projectID:projects.length,
-   DAPPtokenBalance:0,
-   Address:msg.sender });
-   projects.push(d);
- }
+       DAPPtokenBalance:0,
+       Address:msg.sender, 
+       completed:false});
+       projects.push(d);
+    }
 }
