@@ -1,7 +1,7 @@
 pragma solidity >=0.4.21 <0.6.0;
 
 contract  ClarityInCharity{
-    Project[] public projects; // same as beneficiary
+    uint public projectCount = 0;
 
     struct Project{
         uint projectID;
@@ -13,19 +13,22 @@ contract  ClarityInCharity{
         bool completed;
     }
 
+    mapping(uint => Project) public projects;
+
     constructor() public {
         createProject("Deepi","IIITD fees bharni hai :(", 100);
     }
 
     function createProject(string memory myName, string memory myDescription, uint amount) public {
         Project memory d = Project(
-            {projectID:projects.length,
+            {projectID:projectCount+1,
             name:myName, 
             description:myDescription,
             requiredAmount:amount,
             DAPPtokenBalance:0,
             Address:msg.sender, 
             completed:false});
-        projects.push(d);
+        projectCount++;
+        projects[projectCount] = d;
     }
 }
