@@ -2,6 +2,7 @@ pragma solidity >=0.4.21 <0.6.0;
 
 contract  ClarityInCharity{
     uint public projectCount = 0;
+    uint public donorCount = 0;
 
     struct Project{
         uint projectID;
@@ -13,10 +14,28 @@ contract  ClarityInCharity{
         bool completed;
     }
 
+    struct Donor{
+		uint donorID;
+        string name;
+        uint DAPPtokenBalance;
+        address Address;
+    }
+
     mapping(uint => Project) public projects;
+    mapping(uint => Donor) public donors;
 
     constructor() public {
-        createProject("Deepi","IIITD fees bharni hai :(", 100);
+        
+    }
+
+    function createDonor(string memory myName) public {
+        Donor memory d = Donor(
+            { donorID:donorCount+1,
+            name:myName, 
+            DAPPtokenBalance:0,
+            Address:msg.sender });
+        donorCount++;
+        donors[donorCount] = d;
     }
 
     function createProject(string memory myName, string memory myDescription, uint amount) public {
@@ -31,4 +50,12 @@ contract  ClarityInCharity{
         projectCount++;
         projects[projectCount] = d;
     }
+
+    function sendMoney(uint projectID, uint donorID, uint amount) public {
+        if (msg.sender == donors[donorID].Address){
+            donors[donorID].DAPPtokenBalance -= amount;
+            projects[projectID].DAPPtokenBalance += amount;
+        }
+    }
+
 }
