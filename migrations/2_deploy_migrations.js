@@ -1,5 +1,5 @@
-const TodoList = artifacts.require("./ClarityInCharity.sol");
+var ClarityInCharity = artifacts.require("ClarityInCharity");
 
-module.exports = function(deployer) {
-  // deployer.deploy(ClarityInCharity);
+module.exports = function (deployer) {
+  deployer.deploy(ClarityInCharity);
 };
