@@ -34,7 +34,7 @@ contract  ClarityInCharity{
     mapping(uint => Shop) public shops;
 
     constructor() public {
-        
+        createProject("Deepi", "Paisa Dedo plij", 20);
     }
 
     function createDonor(string memory myName) public {
