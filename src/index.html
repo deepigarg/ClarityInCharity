@@ -84,6 +84,20 @@
             <ul id="completedTaskList" class="list-unstyled">
             </ul>
           </div>
+          <div id="content_2">
+            <form onSubmit="App.createStore(); return false;">
+              <input id="newShopname" type="text" class="form-control" placeholder="Add shop name" required>
+              <input type="submit" hidden="">
+            </form>
+            <ul id="storeList" class="list-unstyled">
+              <div class="storeTemplate" class="checkbox" style="display: none">
+                <label>
+                  <input type="checkbox" />
+                  <span class="name">Task content goes here...</span> 
+                  <span class="address">Task content goes here...</span>                </label>
+              </div>
+            </ul>
+          </div>
         </main>
       </div>
     </div>

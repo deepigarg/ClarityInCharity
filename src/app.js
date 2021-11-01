@@ -78,6 +78,7 @@ App = {
 
     // Render Tasks
     await App.renderTasks()
+    await App.renderStores()
 
     // Update loading state
     App.setLoading(false)
@@ -97,13 +98,6 @@ App = {
       const projectDescription = project[2];
       const projectRequiredAmount = project[3].toNumber();
       const projectStatus = project[6];
-      // console.log(project);
-      // console.log(projectId);
-      // console.log(projectName);
-      // console.log(projectDescription);
-      // console.log(projectRequiredAmount);
-      // const taskContent = task[1]
-      // const taskCompleted = task[2]
 
       // Create the html for the task
       const $newTaskTemplate = $taskTemplate.clone()
@@ -136,6 +130,46 @@ App = {
     // console.log(description)
     // console.log(amount)
     await App.charity.createProject(name,description,amount, {from: App.account })
+    window.location.reload()
+  },
+
+  renderStores: async () => {
+    // Load the total task count from the blockchain
+    const shopCount = await App.charity.shopCount()
+    const $storeTemplate = $('.storeTemplate')
+
+    // Render out each task with a new task template
+    for (var i = 1; i <= shopCount; i++) {
+      // Fetch the task data from the blockchain
+      const shop = await App.charity.shops(i);
+      const shopId = shop[0].toNumber();
+      const shopName = shop[1];
+      const shopAddr = shop[2];
+
+      // Create the html for the task
+      const $newStoreTemplate = $storeTemplate.clone()
+      $newStoreTemplate.find('.name').html(shopName)
+      $newStoreTemplate.find('.address').html(shopAddr)
+
+      $('#storeList').append($newStoreTemplate)
+      // Put the task in the correct list
+      // if (projectStatus) {
+      //   $('#completedTaskList').append($newTaskTemplate)
+      // } else {
+      // }
+
+      // Show the task
+      $newStoreTemplate.show()
+    }
+  },
+
+  createStore: async () => {
+    App.setLoading(true)
+    const sname = $('#newShopname').val()
+    // console.log(name)
+    // console.log(description)
+    // console.log(amount)
+    await App.charity.createShop(sname, {from: App.account })
     window.location.reload()
   },
 

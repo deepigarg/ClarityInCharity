@@ -25,7 +25,6 @@ contract  ClarityInCharity{
     struct Shop{
         uint shopID;
         string name;
-        uint DAPPtokenBalance;
         address Address;
     }
 
@@ -34,7 +33,11 @@ contract  ClarityInCharity{
     mapping(uint => Shop) public shops;
 
     constructor() public {
-        createProject("Deepi", "Paisa Dedo plij", 20);
+        // createShop("Patanjali Healthcare", web3.eth.accounts[0]);
+        // createShop("Paradise Plaza", web3.eth.accounts[1]);
+        // createShop("Mummy da Dhaba Bhojan Bhandar", web3.eth.accounts[2]);
+        // createShop("Sharma and sons", web3.eth.accounts[3]);
+        // createShop("GuptaJi Furnitures", web3.eth.accounts[4]);
     }
 
     function createDonor(string memory myName) public {
@@ -63,9 +66,8 @@ contract  ClarityInCharity{
     function createShop(string memory myName) public {
         Shop memory s = Shop({
             shopID:shopCount+1,
-            name:myName, 
-            DAPPtokenBalance:0,
-            Address:msg.sender });
+            name:myName,
+            Address: msg.sender});
         shopCount++;
         shops[shopCount] = s;
     }
