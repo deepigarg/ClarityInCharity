@@ -38,8 +38,8 @@ contract  ClarityInCharity{
     }
 
     function createDonor(string memory myName) public {
-        Donor memory d = Donor(
-            { donorID:donorCount+1,
+        Donor memory d = Donor({ 
+            donorID:donorCount+1,
             name:myName, 
             DAPPtokenBalance:0,
             Address:msg.sender });
@@ -61,8 +61,8 @@ contract  ClarityInCharity{
     }
 
     function createShop(string memory myName) public {
-        Shop memory s = Shop(
-            { shopID:shopCount+1,
+        Shop memory s = Shop({
+            shopID:shopCount+1,
             name:myName, 
             DAPPtokenBalance:0,
             Address:msg.sender });

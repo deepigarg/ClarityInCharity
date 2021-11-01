@@ -92,38 +92,52 @@ App = {
     for (var i = 1; i <= projectCount; i++) {
       // Fetch the task data from the blockchain
       const project = await App.charity.projects(i);
-      const projectId = project.projectID;
-      console.log(project);
-      console.log(projectId);
+      const projectId = project[0].toNumber();
+      const projectName = project[1];
+      const projectDescription = project[2];
+      const projectRequiredAmount = project[3].toNumber();
+      const projectStatus = project[6];
+      // console.log(project);
+      // console.log(projectId);
+      // console.log(projectName);
+      // console.log(projectDescription);
+      // console.log(projectRequiredAmount);
       // const taskContent = task[1]
       // const taskCompleted = task[2]
 
       // Create the html for the task
-      // const $newTaskTemplate = $taskTemplate.clone()
-      // $newTaskTemplate.find('.content').html(taskContent)
-      // $newTaskTemplate.find('input')
-      //                 .prop('name', taskId)
-      //                 .prop('checked', taskCompleted)
-      //                 .on('click', App.toggleCompleted)
+      const $newTaskTemplate = $taskTemplate.clone()
+      $newTaskTemplate.find('.name').html(projectName)
+      $newTaskTemplate.find('.description').html(projectDescription)
+      $newTaskTemplate.find('.amount').html(projectRequiredAmount)
+      $newTaskTemplate.find('input')
+                      .prop('name', projectId)
+                      .prop('checked', projectStatus)
+                      .on('click', App.toggleCompleted)
 
-      // // Put the task in the correct list
-      // if (taskCompleted) {
-      //   $('#completedTaskList').append($newTaskTemplate)
-      // } else {
-      //   $('#taskList').append($newTaskTemplate)
-      // }
+      // Put the task in the correct list
+      if (projectStatus) {
+        $('#completedTaskList').append($newTaskTemplate)
+      } else {
+        $('#taskList').append($newTaskTemplate)
+      }
 
       // Show the task
-      // $newTaskTemplate.show()
+      $newTaskTemplate.show()
     }
   },
 
-  // createTask: async () => {
-  //   App.setLoading(true)
-  //   const content = $('#newTask').val()
-  //   await App.todoList.createTask(content)
-  //   window.location.reload()
-  // },
+  createTask: async () => {
+    App.setLoading(true)
+    const name = $('#newProjectname').val()
+    const description = $('#newProjectDescription').val()
+    const amount = $('#newProjectAmount').val()
+    // console.log(name)
+    // console.log(description)
+    // console.log(amount)
+    await App.charity.createProject(name,description,amount, {from: App.account })
+    window.location.reload()
+  },
 
   // toggleCompleted: async (e) => {
   //   App.setLoading(true)
