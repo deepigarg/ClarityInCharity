@@ -15,6 +15,7 @@ contract  ClarityInCharity{
         address Address;
         bool completed;
         uint shopID;
+        mapping(uint => bool) due_signs;
     }
 
     struct Donor{
@@ -67,8 +68,8 @@ contract  ClarityInCharity{
             completed:false,
             shopID:shopID});
         projects[projectCount] = d;
-        Shop memory s = shops[shopID];
-        s.payments[projectCount]=0;
+        Shop storage s = shops[shopID];
+        s.project_payments[projectCount]=0;
         projectCount++;
     }
 
@@ -91,34 +92,36 @@ contract  ClarityInCharity{
       bool signedByProject;
   }
 
-  function createPayment(uint projectID) public {
+  function createPayment(uint projectID, uint amt) public{
     Payment memory pay = Payment({ 
         PaymentID:paymentCount,
-        donorAddr : msg.sender(),
+        donorAddr : msg.sender,
         projID : projectID,
-        shopID:projects[projID].shopID,
-        amount : msg.value()
+        shopID: projects[projectID].shopID,
+        amount : amt,
+        signedByProject:false
         });
-    projects[projID].balance+=amount;
+    Project storage pro = projects[projectID];
+    pro.balance+=amt;
     payments[paymentCount] = pay;
+    pro.due_signs[paymentCount]=true;
     paymentCount++;
   }
 
-  function signPayment() public {
-    require (msg.sender == project.Address);
-    require (!sig);
-    signed[msg.sender] = true;
+  function signPayment(uint paymentID) public {
+    require (msg.sender == projects[payments[paymentID].projID].Address);
+    require (!payments[paymentID].signedByProject);
+    payments[paymentID].signedByProject = true;
+    delete (projects[payments[paymentID].projID].due_signs[paymentID]);
   }
 
-  function sendMoney(uint shopId) public payable{
-    require (signed[donorAddr] && signed[project.Address]);
-    address payable addr = shop.Address;
-    addr.transfer(amount);
-    shop.payments[project.projectID]+=amount;
+  function sendMoney(uint paymentID) public payable{
+    require(payments[paymentID].signedByProject && msg.sender == payments[paymentID].donorAddr);
+    Payment memory pay = payments[paymentID];
+    address payable addr = shops[pay.shopID].Address;
+    addr.transfer(msg.value);
+    shops[pay.shopID].project_payments[pay.projID]+=msg.value;
   }
-
-
-
 }
 
 

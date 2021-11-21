@@ -91,7 +91,7 @@ App = {
     const $taskTemplate = $('.taskTemplate')
 
     // Render out each task with a new task template
-    for (var i = 1; i <= projectCount; i++) {
+    for (var i = 0; i < projectCount; i++) {
       // Fetch the task data from the blockchain
       const project = await App.charity.projects(i);
       const projectId = project[0].toNumber();
@@ -99,12 +99,14 @@ App = {
       const projectDescription = project[2];
       const projectRequiredAmount = project[3].toNumber();
       const projectStatus = project[6];
+      const projectShop = project[7];
 
       // Create the html for the task
       const $newTaskTemplate = $taskTemplate.clone()
       $newTaskTemplate.find('.name').html(projectName)
       $newTaskTemplate.find('.description').html(projectDescription)
       $newTaskTemplate.find('.amount').html(projectRequiredAmount)
+      $newTaskTemplate.find('.shop').html(projectShop)
       $newTaskTemplate.find('input')
                       .prop('name', projectId)
                       .prop('checked', projectStatus)
@@ -127,10 +129,11 @@ App = {
     const name = $('#newProjectname').val()
     const description = $('#newProjectDescription').val()
     const amount = $('#newProjectAmount').val()
+    const shopId = $('#newProjectShop').val()
     // console.log(name)
     // console.log(description)
     // console.log(amount)
-    await App.charity.createProject(name,description,amount, {from: App.account })
+    await App.charity.createProject(name,description,amount,shopId, {from: App.account })
     window.location.reload()
   },
 
@@ -140,7 +143,7 @@ App = {
     const $storeTemplate = $('.storeTemplate')
 
     // Render out each task with a new task template
-    for (var i = 1; i <= shopCount; i++) {
+    for (var i = 0; i < shopCount; i++) {
       // Fetch the task data from the blockchain
       const shop = await App.charity.shops(i);
       const shopId = shop[0].toNumber();
