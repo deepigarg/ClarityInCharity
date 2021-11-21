@@ -4,21 +4,23 @@ contract  ClarityInCharity{
     uint public projectCount = 0;
     uint public donorCount = 0;
     uint public shopCount = 0;
+    uint public paymentCount = 0;
 
     struct Project{
         uint projectID;
         string name;
         string description;
         uint requiredAmount;
-        uint DAPPtokenBalance;
+        uint balance;
         address Address;
         bool completed;
+        uint shopID;
     }
 
     struct Donor{
 		uint donorID;
         string name;
-        uint DAPPtokenBalance;
+        uint balance;
         address Address;
     }
 
@@ -26,11 +28,14 @@ contract  ClarityInCharity{
         uint shopID;
         string name;
         address payable Address;
+        mapping(uint => uint) project_payments;
     }
 
     mapping(uint => Project) public projects;
     mapping(uint => Donor) public donors;
     mapping(uint => Shop) public shops;
+    mapping(uint => Payment) public payments;
+
 
     constructor() public {
         // createShop("Patanjali Healthcare", web3.eth.accounts[0]);
@@ -42,49 +47,79 @@ contract  ClarityInCharity{
 
     function createDonor(string memory myName) public {
         Donor memory d = Donor({ 
-            donorID:donorCount+1,
+            donorID:donorCount,
             name:myName, 
-            DAPPtokenBalance:0,
+            balance:0,
             Address:msg.sender });
-        donorCount++;
         donors[donorCount] = d;
+        donorCount++;
+
     }
 
-    function createProject(string memory myName, string memory myDescription, uint amount) public {
+    function createProject(string memory myName, string memory myDescription, uint amount, uint shopID) public {
         Project memory d = Project(
-            {projectID:projectCount+1,
+            {projectID:projectCount,
             name:myName, 
             description:myDescription,
             requiredAmount:amount,
-            DAPPtokenBalance:0,
+            balance:0,
             Address:msg.sender, 
-            completed:false});
-        projectCount++;
+            completed:false,
+            shopID:shopID});
         projects[projectCount] = d;
+        Shop memory s = shops[shopID];
+        s.payments[projectCount]=0;
+        projectCount++;
     }
 
     function createShop(string memory myName) public {
         Shop memory s = Shop({
-            shopID:shopCount+1,
+            shopID:shopCount,
             name:myName,
             Address: msg.sender});
-        shopCount++;
         shops[shopCount] = s;
+        shopCount++;
     }
-    
-    function sendMoney(uint shopId) public payable{
-        Shop memory s = shops[shopId];
-        address payable addr = s.Address;
-        addr.transfer(msg.value);
-    }
+
+  
+  struct Payment{
+      uint PaymentID;
+      address donorAddr; 
+      uint projID;
+      uint shopID;
+      uint amount;
+      bool signedByProject;
+  }
+
+  function createPayment(uint projectID) public {
+    Payment memory pay = Payment({ 
+        PaymentID:paymentCount,
+        donorAddr : msg.sender(),
+        projID : projectID,
+        shopID:projects[projID].shopID,
+        amount : msg.value()
+        });
+    projects[projID].balance+=amount;
+    payments[paymentCount] = pay;
+    paymentCount++;
+  }
+
+  function signPayment() public {
+    require (msg.sender == project.Address);
+    require (!sig);
+    signed[msg.sender] = true;
+  }
+
+  function sendMoney(uint shopId) public payable{
+    require (signed[donorAddr] && signed[project.Address]);
+    address payable addr = shop.Address;
+    addr.transfer(amount);
+    shop.payments[project.projectID]+=amount;
+  }
+
+
+
 }
 
 
-contract Money{
-    uint public amount = 1 ether;
 
-    function send(address payable _addr) public payable{
-        require(msg.value >= amount);
-        _addr.transfer(msg.value);
-    }
-}

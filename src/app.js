@@ -56,7 +56,6 @@ App = {
   loadContract: async () => {
     // Create a JavaScript version of the smart contract
     const charity = await $.getJSON('ClarityInCharity.json')
-    const money = await $.getJSON('Money.json')
 
     // console.log(charity)
     App.contracts.Charity = TruffleContract(charity)
@@ -64,15 +63,6 @@ App = {
 
     // Hydrate the smart contract with values from the blockchain
     App.charity = await App.contracts.Charity.deployed()
-
-
-    App.contracts.money = TruffleContract(money)
-    App.contracts.money.setProvider(App.web3Provider)
-
-    // Hydrate the smart contract with values from the blockchain
-    App.money = await App.contracts.money.deployed()
-
-
   },
 
   render: async () => {
