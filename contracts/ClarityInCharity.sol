@@ -25,7 +25,7 @@ contract  ClarityInCharity{
     struct Shop{
         uint shopID;
         string name;
-        address Address;
+        address payable Address;
     }
 
     mapping(uint => Project) public projects;
@@ -71,12 +71,20 @@ contract  ClarityInCharity{
         shopCount++;
         shops[shopCount] = s;
     }
-
-    function sendMoney(uint projectID, uint donorID, uint amount) public {
-        if (msg.sender == donors[donorID].Address){
-            donors[donorID].DAPPtokenBalance -= amount;
-            projects[projectID].DAPPtokenBalance += amount;
-        }
+    
+    function sendMoney(uint shopId) public payable{
+        Shop memory s = shops[shopId];
+        address payable addr = s.Address;
+        addr.transfer(msg.value);
     }
+}
 
+
+contract Money{
+    uint public amount = 1 ether;
+
+    function send(address payable _addr) public payable{
+        require(msg.value >= amount);
+        _addr.transfer(msg.value);
+    }
 }
