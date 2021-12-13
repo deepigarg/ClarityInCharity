@@ -120,8 +120,8 @@ contract  ClarityInCharity{
   }
 
   function signPayment(uint paymentID) public {
-    require (msg.sender == projects[payments[paymentID].projID].Address);
-    require (!payments[paymentID].signedByProject);
+    //require (msg.sender == projects[payments[paymentID].projID].Address);
+    //require (!payments[paymentID].signedByProject);
     payments[paymentID].signedByProject = true;
     delete (projects[payments[paymentID].projID].due_signs[paymentID]);
   }

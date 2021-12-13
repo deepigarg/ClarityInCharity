@@ -91,6 +91,8 @@ App = {
     await App.renderTasks()
     await App.renderStores()
     await App.renderPayments()
+    await App.renderTransactions()
+
 
     // Update loading state
     App.setLoading(false)
@@ -126,18 +128,21 @@ App = {
         const pmtId = pmt[0].toNumber();
         const dnrAddr = pmt[1];
         const donatedamt = pmt[4].toNumber();
+        const signedbyproj = pmt[5];
 
-      const $newPmtTemplate = $paymentTemplate.clone()
-      $newPmtTemplate.find('.paymentId').html(pmtId)
-      $newPmtTemplate.find('.donorAddr').html(dnrAddr)
-      $newPmtTemplate.find('.donatedAmt').html(donatedamt)
+      // if(signedbyproj==false){
+        const $newPmtTemplate = $paymentTemplate.clone()
+        $newPmtTemplate.find('.paymentId').html(pmtId)
+        $newPmtTemplate.find('.donorAddr').html(dnrAddr)
+        $newPmtTemplate.find('.donatedAmt').html(donatedamt)
 
-      const funcCall = "App.selectPayment("
-      const param = funcCall.concat(String(i))
-      $newPmtTemplate.find('.sign-btn').attr("onclick",param.concat(")"))
+        const funcCall = "App.selectPayment("
+        const param = funcCall.concat(String(i))
+        $newPmtTemplate.find('.sign-btn').attr("onclick",param.concat(")"))
 
-      $('#paymentList').append($newPmtTemplate)
-      $newPmtTemplate.show()
+        $('#paymentList').append($newPmtTemplate)
+        $newPmtTemplate.show()
+      // }
       }
 
       
@@ -160,7 +165,65 @@ App = {
     }
   },
 
+  sendmoney: async() => {
+    // console.log(App.selectedPaymentId)
+    // await App.charity.sendMoney(App.selectedPaymentId, {from: App.account })
+  },
+
+  renderTransactions: async() => {
+    // const donorCount = await App.charity.donorCount()
+    // // const $taskTemplate = $('.taskTemplate')
+    // var donorID = 0;
+    // // Render out each task with a new task template
+    // for (var i = 0; i < donorCount; i++) {
+    //   // Fetch the task data from the blockchain
+    //   const donor = await App.charity.donors(i);
+    //   const dnrId = donor[0].toNumber();
+    //   const dnrAddr = donor[3];
+    //   if(dnrAddr==App.account){
+    //     donorID = dnrId;
+    //   }
+    // }
+    // Load the total task count from the blockchain
+    const paymentCount = await App.charity.paymentCount()
+    // console.log(paymentCount)
+    const $payTemplate = $('.payTemplate')
+
+    // Render out each task with a new task template
+    for (var i = 0; i < paymentCount; i++) {
+      // Fetch the task data from the blockchain
+      const pmt = await App.charity.payments(i);
+      const donrAddr = pmt[1]
+      if(donrAddr==App.account){
+        // console.log("Mil gyaaaaaaa")
+        const pmtId = pmt[0].toNumber();
+        const proID = pmt[2].toNumber();
+        const shopID = pmt[3].toNumber();
+        const donatedamt = pmt[4].toNumber();
+        const signedbyproj = pmt[5];
+
+      if(signedbyproj==true){
+        const $newPayTemplate = $payTemplate.clone()
+        $newPayTemplate.find('.paymentId').html(pmtId)
+        $newPayTemplate.find('.projID').html(proID)
+        $newPayTemplate.find('.shopID').html(shopID)
+        $newPayTemplate.find('.amt').html(donatedamt)
+
+        // const funcCall = "App.selectPayment("
+        // const param = funcCall.concat(String(i))
+        // $newPayTemplate.find('.send-btn').attr("onclick",param.concat(")"))
+
+        $('#payList').append($newPayTemplate)
+        $newPayTemplate.show()
+      }
+      }
+      
+    }
+
+  },
+
   addSign: async() => {
+    console.log(App.selectedPaymentId)
     await App.charity.signPayment(App.selectedPaymentId, {from: App.account })
   },
 
