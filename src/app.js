@@ -1,6 +1,10 @@
 App = {
   loading: false,
   contracts: {},
+  selectedShopID:0,
+  shopBalance:"",
+  selectedProjectId:0,
+  selectedPaymentId:0,
 
   load: async () => {
     await App.loadWeb3()
@@ -51,6 +55,11 @@ App = {
   loadAccount: async () => {
     // Set the current blockchain account
     App.account = web3.eth.accounts[0]
+    web3.eth.getBalance(App.account, (err, balance) => {
+      balance = web3.fromWei(balance, "ether") + " ETH"
+      App.shopBalance=balance
+    });
+
   },
 
   loadContract: async () => {
@@ -64,6 +73,7 @@ App = {
     // Hydrate the smart contract with values from the blockchain
     App.charity = await App.contracts.Charity.deployed()
   },
+
 
   render: async () => {
     // Prevent double render
@@ -80,9 +90,78 @@ App = {
     // Render Tasks
     await App.renderTasks()
     await App.renderStores()
+    await App.renderPayments()
 
     // Update loading state
     App.setLoading(false)
+  },
+
+  renderPayments: async () => {
+
+    const projectCount = await App.charity.projectCount()
+    // const $taskTemplate = $('.taskTemplate')
+    var projectID = 0;
+    // Render out each task with a new task template
+    for (var i = 0; i < projectCount; i++) {
+      // Fetch the task data from the blockchain
+      const project = await App.charity.projects(i);
+      const projectId = project[0].toNumber();
+      const projectAddr = project[5];
+      if(projectAddr==App.account){
+        projectID = projectId;
+      }
+    }
+    // Load the total task count from the blockchain
+    const paymentCount = await App.charity.paymentCount()
+    // console.log(paymentCount)
+    const $paymentTemplate = $('.paymentTemplate')
+
+    // Render out each task with a new task template
+    for (var i = 0; i < paymentCount; i++) {
+      // Fetch the task data from the blockchain
+      const pmt = await App.charity.payments(i);
+      const projId = pmt[2]
+      if(projId==projectID){
+        console.log("Mil gyaaaaaaa")
+        const pmtId = pmt[0].toNumber();
+        const dnrAddr = pmt[1];
+        const donatedamt = pmt[4].toNumber();
+
+      const $newPmtTemplate = $paymentTemplate.clone()
+      $newPmtTemplate.find('.paymentId').html(pmtId)
+      $newPmtTemplate.find('.donorAddr').html(dnrAddr)
+      $newPmtTemplate.find('.donatedAmt').html(donatedamt)
+
+      const funcCall = "App.selectPayment("
+      const param = funcCall.concat(String(i))
+      $newPmtTemplate.find('.sign-btn').attr("onclick",param.concat(")"))
+
+      $('#paymentList').append($newPmtTemplate)
+      $newPmtTemplate.show()
+      }
+
+      
+      // const projectRequiredAmount = project[3].toNumber();
+      // const projectStatus = project[6];
+      // const projectShopNo = project[7].toNumber();
+      
+      // const url = "donate.html?id="
+      // $newTaskTemplate.find('#amt-to-give').attr("projectId",String(i))
+
+      // $newTaskTemplate.find('input')
+      //                 .prop('name', projectId)
+      //                 .prop('checked', projectStatus)
+      //                 .on('click', App.toggleCompleted)
+
+      // Put the task in the correct list
+
+      // Show the task
+      
+    }
+  },
+
+  addSign: async() => {
+    await App.charity.signPayment(App.selectedPaymentId, {from: App.account })
   },
 
   renderTasks: async () => {
@@ -99,18 +178,29 @@ App = {
       const projectDescription = project[2];
       const projectRequiredAmount = project[3].toNumber();
       const projectStatus = project[6];
-      const projectShop = project[7];
+      const projectShopNo = project[7].toNumber();
+      const projectshop = await App.charity.shops(projectShopNo);
 
       // Create the html for the task
       const $newTaskTemplate = $taskTemplate.clone()
+      const img_url= "images/don"
+      const img_url1= img_url.concat(String(i))
+      $newTaskTemplate.find('.card-img').attr("src",img_url1.concat(".jpg"))
       $newTaskTemplate.find('.name').html(projectName)
       $newTaskTemplate.find('.description').html(projectDescription)
       $newTaskTemplate.find('.amount').html(projectRequiredAmount)
-      $newTaskTemplate.find('.shop').html(projectShop)
-      $newTaskTemplate.find('input')
-                      .prop('name', projectId)
-                      .prop('checked', projectStatus)
-                      .on('click', App.toggleCompleted)
+      $newTaskTemplate.find('.shop').html(projectshop[1])
+
+      const funcCall = "App.selectProject("
+      const param = funcCall.concat(String(i))
+      $newTaskTemplate.find('.transfer-btn').attr("onclick",param.concat(")"))
+      // const url = "donate.html?id="
+      // $newTaskTemplate.find('#amt-to-give').attr("projectId",String(i))
+
+      // $newTaskTemplate.find('input')
+      //                 .prop('name', projectId)
+      //                 .prop('checked', projectStatus)
+      //                 .on('click', App.toggleCompleted)
 
       // Put the task in the correct list
       if (projectStatus) {
@@ -124,16 +214,72 @@ App = {
     }
   },
 
-  createTask: async () => {
+  selectProject: async(projectID) => {
+    selectedProjectId = projectID;
+    App.startTransfer();
+  },
+
+  selectPayment: async(paymentID) => {
+    selectedPaymentId = paymentID;
+    App.addSign();
+  },
+
+  startTransfer: async()=>{
+    App.setLoading(true)
+
+    const amtToGive = $('#amttogive').val()
+    // const projectId = $('#amttogive').attr("projectId")
+    console.log("blalalalal",amtToGive)
+    console.log(selectedProjectId)
+    await App.charity.createPayment(selectedProjectId,amtToGive, {from: App.account })
+    window.location.reload()
+  },
+
+  showShopData: async () => {
+    const $shopInfo = $('.shopInfo')
+    // web3.eth.getBalance(App.account, (err, balance) => {
+    //   balance = web3.fromWei(balance, "ether") + " ETH"
+    // });
+    const $newshopInfo = $shopInfo.clone()
+    $newshopInfo.find('.total-bal').html(App.shopBalance)
+    $('#balanceShop').append($newshopInfo)
+    $newshopInfo.show()
+
+    // const shopCount = await App.charity.shopCount()
+    // for (var i = 0; i < shopCount; i++) {
+    //   const shop = await App.charity.shops(i)
+    //   const shopAddress = shop[6]
+    //   if (shopAddress==App.account){
+    //     // payments = shop[7]
+    //     console.log(shop[7])
+    //     // for (var i=0;i<)
+    //   }
+    // }
+  },
+
+  // createTask: async () => {
+  //   App.setLoading(true)
+  //   const name = $('#newProjectname').val()
+  //   const description = $('#newProjectDescription').val()
+  //   const amount = $('#newProjectAmount').val()
+  //   // const shopId = $('#newProjectShop').val()
+  //   // console.log(name)
+  //   // console.log(description)
+  //   // console.log(amount)
+  //   // await App.charity.createProject(name,description,amount,shopId, {from: App.account })
+  //   // window.location.reload()
+  // },
+
+  selectShop: (shopID) => {
+    selectedShopID = shopID;
+  },
+
+  submitProject: async () => {
     App.setLoading(true)
     const name = $('#newProjectname').val()
     const description = $('#newProjectDescription').val()
     const amount = $('#newProjectAmount').val()
-    const shopId = $('#newProjectShop').val()
-    // console.log(name)
-    // console.log(description)
-    // console.log(amount)
-    await App.charity.createProject(name,description,amount,shopId, {from: App.account })
+    await App.charity.createProject(name,description,amount,selectedShopID, {from: App.account })
     window.location.reload()
   },
 
@@ -148,12 +294,26 @@ App = {
       const shop = await App.charity.shops(i);
       const shopId = shop[0].toNumber();
       const shopName = shop[1];
-      const shopAddr = shop[2];
+      const shopDesc = shop[2];
+      const shopPhone = shop[3];
+      const shopUrl = shop[4];
+      const shopCat = shop[5];
+      // const shopAddr = shop[5];
 
       // Create the html for the task
       const $newStoreTemplate = $storeTemplate.clone()
+      const img_url= "images/"
+      const img_url1= img_url.concat(shopCat)
+      $newStoreTemplate.find('.card-img').attr("src",img_url1.concat(".jpg"))
       $newStoreTemplate.find('.name').html(shopName)
-      $newStoreTemplate.find('.address').html(shopAddr)
+      $newStoreTemplate.find('.description').html(shopDesc)
+      $newStoreTemplate.find('.phone').html(shopPhone)
+      $newStoreTemplate.find('.site').html(shopUrl)
+      const funcCall = "App.selectShop("
+      const param = funcCall.concat(String(i))
+      $newStoreTemplate.find('.btn').attr("onclick",param.concat(")"))
+
+      // $newStoreTemplate.find('.address').html(shopAddr)
 
       $('#storeList').append($newStoreTemplate)
       // Put the task in the correct list
@@ -170,10 +330,14 @@ App = {
   createStore: async () => {
     App.setLoading(true)
     const sname = $('#newShopname').val()
+    const sdesc = $('#newShopDesc').val()
+    const sphone = $('#newShopPhone').val()
+    const surl = $('#newShopUrl').val()
+    const scat = $('#newShopCat').val() 
     // console.log(name)
     // console.log(description)
     // console.log(amount)
-    await App.charity.createShop(sname, {from: App.account })
+    await App.charity.createShop(sname, sdesc, sphone, surl, scat, {from: App.account })
     window.location.reload()
   },
   // toggleCompleted: async (e) => {

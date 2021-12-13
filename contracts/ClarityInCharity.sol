@@ -28,6 +28,10 @@ contract  ClarityInCharity{
     struct Shop{
         uint shopID;
         string name;
+        string description;
+        string contactNo;
+        string url;
+        string category;
         address payable Address;
         mapping(uint => uint) project_payments;
     }
@@ -73,12 +77,19 @@ contract  ClarityInCharity{
         projectCount++;
     }
 
-    function createShop(string memory myName) public {
+    function createShop(string memory myName, string memory myDescription, string memory myPhone, string memory myUrl, string memory myCategory) public {
         Shop memory s = Shop({
             shopID:shopCount,
             name:myName,
-            Address: msg.sender});
+            description:myDescription,
+            contactNo: myPhone,
+            url: myUrl,
+            category: myCategory,
+            Address: msg.sender
+            });
         shops[shopCount] = s;
+        // Shop storage s1 = shops[shopCount];
+        // s1.project_payments[0] = 0;
         shopCount++;
     }
 
