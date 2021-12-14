@@ -374,9 +374,6 @@ App = {
     const sphone = $('#newShopPhone').val()
     const surl = $('#newShopUrl').val()
     const scat = $('#newShopCat').val() 
-    // console.log(name)
-    // console.log(description)
-    // console.log(amount)
     await App.charity.createShop(sname, sdesc, sphone, surl, scat, {from: App.account })
     window.location.reload()
   },
