@@ -98,7 +98,19 @@ App = {
     App.setLoading(false)
   },
 
+  selectPayment: async(paymentID) => {
+    await App.charity.signPayment(paymentID, {from: App.account })
+    // selectedPaymentId = paymentID;
+    // App.addSign();
+  },
+
+  // addSign: async() => {
+  //   console.log(App.selectedPaymentId)
+  //   await App.charity.signPayment(App.selectedPaymentId, {from: App.account })
+  // },
+
   renderPayments: async () => {
+    console.log("Inside render payments")
 
     const projectCount = await App.charity.projectCount()
     // const $taskTemplate = $('.taskTemplate')
@@ -113,6 +125,7 @@ App = {
         projectID = projectId;
       }
     }
+    console.log("projectID", projectID)
     // Load the total task count from the blockchain
     const paymentCount = await App.charity.paymentCount()
     // console.log(paymentCount)
@@ -130,19 +143,19 @@ App = {
         const donatedamt = pmt[4].toNumber();
         const signedbyproj = pmt[5];
 
-      // if(signedbyproj==false){
-        const $newPmtTemplate = $paymentTemplate.clone()
-        $newPmtTemplate.find('.paymentId').html(pmtId)
-        $newPmtTemplate.find('.donorAddr').html(dnrAddr)
-        $newPmtTemplate.find('.donatedAmt').html(donatedamt)
+        if(signedbyproj==false){
+          const $newPmtTemplate = $paymentTemplate.clone()
+          $newPmtTemplate.find('.paymentId').html(pmtId)
+          $newPmtTemplate.find('.donorAddr').html(dnrAddr)
+          $newPmtTemplate.find('.donatedAmt').html(donatedamt)
 
-        const funcCall = "App.selectPayment("
-        const param = funcCall.concat(String(i))
-        $newPmtTemplate.find('.sign-btn').attr("onclick",param.concat(")"))
+          const funcCall = "App.selectPayment("
+          const param = funcCall.concat(String(i))
+          $newPmtTemplate.find('.sign-btn').attr("onclick",param.concat(")"))
 
-        $('#paymentList').append($newPmtTemplate)
-        $newPmtTemplate.show()
-      // }
+          $('#paymentList').append($newPmtTemplate)
+          $newPmtTemplate.show()
+        }
       }
 
       
@@ -222,11 +235,6 @@ App = {
 
   },
 
-  addSign: async() => {
-    console.log(App.selectedPaymentId)
-    await App.charity.signPayment(App.selectedPaymentId, {from: App.account })
-  },
-
   renderTasks: async () => {
     // Load the total task count from the blockchain
     const projectCount = await App.charity.projectCount()
@@ -280,11 +288,6 @@ App = {
   selectProject: async(projectID) => {
     selectedProjectId = projectID;
     App.startTransfer();
-  },
-
-  selectPayment: async(paymentID) => {
-    selectedPaymentId = paymentID;
-    App.addSign();
   },
 
   startTransfer: async()=>{
