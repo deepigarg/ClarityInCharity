@@ -77,18 +77,22 @@
             <p class="text-center">Loading...</p>
           </div>
           <div id="content">
+            <h4>Sign payments</h4>
             <ul id="paymentList" class="list-unstyled" style="padding: 10; justify-content: center;">
-                <div class="paymentTemplate" style="width: 18rem; display: none; margin: 25px 5px 25px 5px">
-                    <!-- <img class="card-img" src="" alt="Card image cap"> -->
-                    <div class="card-body">
-                      <h5><span>Payment ID: </span><span class="paymentId">ID</span></h5>
-                      <p><span>Donor's Address: </span> <span class="donorAddr">donor Address</span></p>
-                      <p><span>Donated Amount: </span> <span class="donatedAmt">amount</span></p>
-                      <!-- <p> <span>Supplier: </span> <span class="shop">shop</span></p> -->
-                      <button class="sign-btn">Sign Transaction</button>
+                <div class="paymentTemplate" style="display: none;">
+                  <div class="card border border-info shadow-0 mb-3 w-100">
+                    <div class="card-header"><h5><span>Payment ID: </span><span class="paymentId">ID</span></h5>
+                    </div>
+                    <div class="card-body text-info">
+                      <div  style="display:flex;">
+
+                        <p style=" flex: auto"><span>Donor's Address: </span> <span class="donorAddr">donor Address</span></p>
+                        <p style=" flex: auto"><span>Donated Amount: </span> <span class="donatedAmt">amount</span></p>
+                        <button style=" flex: auto" class="sign-btn">Sign Transaction</button>
+                      </div>
                     </div>
                   </div>
-
+                </div>
             </ul>
             
           </div>
