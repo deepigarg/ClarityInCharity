@@ -41,19 +41,17 @@
     <div class="container d-flex align-items-center justify-content-between">
 
       <h1 class="logo"><a href="../index.html">Clarity</a></h1>
-      <!-- Uncomment below if you prefer to use an image logo -->
-      <!-- <a href="index.html" class="logo"><img src="../assets/img/logo.png" alt="" class="img-fluid"></a>-->
-
+      <div class="navbar">
+        <small><a class="nav-link" href="#"><span>Address :- </span><span id="account"></span></a></small>
+      </div>
       <nav id="navbar" class="navbar">
         <ul>
           <li><a class="nav-link scrollto active" href="../index.html">Home</a></li>
-          <li><a class="nav-link scrollto" href="#about">About</a></li>
-          <li><a class="nav-link scrollto" href="src/donor.html">Donor</a></li>
-          <li><a class="nav-link scrollto " href="src/project.html">Project</a></li>
-          <li><a class="nav-link scrollto" href="src/store.html">Store</a></li>
-          <li><a class="nav-link scrollto" href="#team">team</a></li>
-          <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
-          <li><a class="getstarted scrollto" href="#about">Get Started</a></li>
+          <li><a class="nav-link scrollto" href="../index.html#about">About</a></li>
+          <li><a class="nav-link scrollto" href="./donor.html">Donor</a></li>
+          <li><a class="nav-link scrollto " href="./project.html">Project</a></li>
+          <li><a class="nav-link scrollto" href="./shop.html">Store</a></li>
+          <li><a class="nav-link scrollto" href="../index.html#team">team</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
@@ -71,39 +69,46 @@
       <div class="row">
         <div class="pt-5 pt-lg-0 order-2 order-lg-1 d-flex flex-column justify-content-center">
 
-        <main role="main" class="col-lg-12 d-flex justify-content-center">
-          <div id="loader" class="text-center">
-            <p class="text-center">Loading...</p>
-          </div>
-          <div id="content">
-            <h4>Pending Donations</h4>
-            <ul id="payList" class="list-unstyled" style="padding: 10; justify-content: center;">
-                <div class="payTemplate" style="width: 18rem; display: none; margin: 25px 5px 25px 5px">
-                    <!-- <img class="card-img" src="" alt="Card image cap"> -->
-                    <div class="card-body">
-                      <h5><span>Payment ID: </span><span class="paymentId">ID</span></h5>
-                      <p><span>Project ID: </span> <span class="projID">project id</span></p>
-                      <p><span>Shop ID: </span> <span class="shopID">shop id</span></p>
-                      <p><span>Amount: </span> <span class="amt">amount</span></p>
-                      <!-- <p> <span>Supplier: </span> <span class="shop">shop</span></p> -->
-                      <button class="send-btn">Complete Transaction</button>
+          <main role="main">
+            <div id="loader" class="text-center">
+              <p class="text-center">Loading...</p>
+            </div>
+            <div id="content">
+              <h4>Pending Donations</h4>
+              <ul id="payList" class="list-unstyled" style="padding: 10; justify-content: center;">
+                  <div class="payTemplate" style="display: none;">
+                    <div class="card border border-info shadow-0 mb-3 w-100">
+                      <div class="card-header"><h5><span>Payment ID: </span><span class="paymentId">ID</span></h5>
+                      </div>
+                      <div class="card-body text-info">
+                        <div  style="display:flex;">
+                          <p style=" flex: auto"><span>Project ID: </span> <span class="projID">project id</span></p>
+                          <p style=" flex: auto"><span>Shop ID: </span> <span class="shopID">shop id</span></p>
+                          <p style=" flex: auto"><span>Amount: </span> <span class="amt">amount</span></p>
+                          <button style=" flex: auto" class="send-btn">Complete Transaction</button>
+                        </div>
+                      </div>
                     </div>
                   </div>
-            </ul>
-            <h4>Past Donations</h4>
-            <ul id="payedList" class="list-unstyled" style="padding: 10; justify-content: center;">
-                <div class="payedTemplate" style="width: 18rem; display: none; margin: 25px 5px 25px 5px">
-                    <!-- <img class="card-img" src="" alt="Card image cap"> -->
-                    <div class="card-body">
-                      <h5><span>Payment ID: </span><span class="paymentId">ID</span></h5>
-                      <p><span>Project ID: </span> <span class="projID">project id</span></p>
-                      <p><span>Shop ID: </span> <span class="shopID">shop id</span></p>
-                      <p><span>Amount: </span> <span class="amt">amount</span></p>
+              </ul>
+              <h4>Past Donations</h4>
+              <ul id="payedList" class="list-unstyled" style="padding: 10; justify-content: center;">
+                  <div class="payedTemplate" style="display: none;">
+                    <div class="card border border-success shadow-0 mb-3 w-75">
+                      <div class="card-header"><h5><span>Payment ID: </span><span class="paymentId">ID</span></h5>
+                      </div>
+                      <div class="card-body text-success">
+                        <div  style="display:flex;">
+                          <p style=" flex: auto"><span>Project ID: </span> <span class="projID">project id</span></p>
+                          <p style=" flex: auto"><span>Shop ID: </span> <span class="shopID">shop id</span></p>
+                          <p style=" flex: auto"><span>Amount: </span> <span class="amt">amount</span></p>
+                        </div>
+                      </div>
                     </div>
                   </div>
-            </ul>
-          </div>
-        </main>
+              </ul>
+            </div>
+          </main>
 
         </div>
       </div>

@@ -41,19 +41,20 @@
     <div class="container d-flex align-items-center justify-content-between">
 
       <h1 class="logo"><a href="../index.html">Clarity</a></h1>
+      <div class="navbar">
+        <small><a class="nav-link" href="#"><span>Address :- </span><span id="account"></span></a></small>
+      </div>
       <!-- Uncomment below if you prefer to use an image logo -->
       <!-- <a href="index.html" class="logo"><img src="../assets/img/logo.png" alt="" class="img-fluid"></a>-->
 
       <nav id="navbar" class="navbar">
         <ul>
           <li><a class="nav-link scrollto active" href="../index.html">Home</a></li>
-          <li><a class="nav-link scrollto" href="#about">About</a></li>
-          <li><a class="nav-link scrollto" href="src/donor.html">Donor</a></li>
-          <li><a class="nav-link scrollto " href="src/project.html">Project</a></li>
-          <li><a class="nav-link scrollto" href="src/store.html">Store</a></li>
-          <li><a class="nav-link scrollto" href="#team">team</a></li>
-          <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
-          <li><a class="getstarted scrollto" href="#about">Get Started</a></li>
+          <li><a class="nav-link scrollto" href="../index.html#about">About</a></li>
+          <li><a class="nav-link scrollto" href="./donor.html">Donor</a></li>
+          <li><a class="nav-link scrollto " href="./project.html">Project</a></li>
+          <li><a class="nav-link scrollto" href="./shop.html">Store</a></li>
+          <li><a class="nav-link scrollto" href="../index.html#team">team</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
@@ -65,27 +66,32 @@
 
 
   <!-- ======= Hero Section ======= -->
-  <section id="hero" class="d-flex align-items-center" style="margin-top:100px">
+  <section id="hero" class="featured-services d-flex align-items-center" style="margin-top:100px">
 
     <div class="container">
       <div class="row">
         <div class="col-lg-6 pt-5 pt-lg-0 order-2 order-lg-1 d-flex flex-column justify-content-center">
-          <h1>Wow! You are amazin</h1>
-          <div class="col-lg-4 col-md-6">
+          <h1>We are all with you!</h1>
+          <div class="col-lg-4 col-md-6" style="width:20rem">
             <div class="icon-box">
-              <div class="icon"><i class="bi bi-laptop"></i></div>
+              <div class="icon"><i class="bi bi-plus-circle-dotted"></i></div>
               <h4 class="title"><a href="createProject.html">Create Project</a></h4>
-              <p class="description">Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident</p>
+              <p class="description">Create a new project</p>
             </div>
           </div>
-          <div class="col-lg-4 col-md-6 mt-4 mt-md-0">
+          <div class="col-lg-4 col-md-6 mt-4 mt-md-0" style="width:20rem">
             <div class="icon-box">
-              <div class="icon"><i class="bi bi-card-checklist"></i></div>
+              <div class="icon"><i class="bi bi-check2-circle"></i></div>
               <h4 class="title"><a href="signPayment.html">Sign Payments</a></h4>
-              <p class="description">Minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat tarad limino ata</p>
+              <p class="description">Add signature on payments initiated by Donors</p>
             </div>
           </div>
-          <span class="css-dsbhw1">Your Balance</span>
+          <!-- <h2 class="css-dsbhw1">Your Balance</h2> -->
+          <ul  id="balanceProj">
+            <div class="projInfo" style="display: none;">
+                <p class="title">Money Collected: <span class="proj-bal">Account balance</span></p>
+              </div>
+          </ul>
 
 
 

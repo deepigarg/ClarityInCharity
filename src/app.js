@@ -90,6 +90,7 @@ App = {
     $('#account').html(App.account)
 
     // Render Tasks
+    await App.renderCounts()
     await App.renderTasks()
     await App.renderStores()
     await App.renderPayments()
@@ -101,11 +102,23 @@ App = {
     App.setLoading(false)
   },
 
+  renderCounts: async() => {
+    const donorCount = await App.charity.donorCount()
+    $('#purecounter1').attr("data-purecounter-end",String(donorCount.toNumber()))
+    console.log(donorCount.toNumber())
+    const projectCount = await App.charity.projectCount()
+    $('#purecounter2').attr("data-purecounter-end",String(projectCount.toNumber()))
+    console.log(projectCount.toNumber())
+    const storeCount = await App.charity.shopCount()
+    $('#purecounter3').attr("data-purecounter-end",String(storeCount.toNumber()))
+    console.log(storeCount.toNumber())
+    const pmtCount = await App.charity.paymentCount()
+    $('#purecounter4').attr("data-purecounter-end",String(pmtCount.toNumber()))
+    console.log(pmtCount.toNumber())
+  },
+
   renderDonorBal: async() => {
     const $donInfo = $('.donInfo')
-    // web3.eth.getBalance(App.account, (err, balance) => {
-    //   balance = web3.fromWei(balance, "ether") + " ETH"
-    // });
     const $newdonInfo = $donInfo.clone()
     $newdonInfo.find('.don-bal').html(App.donorBalance)
     $('#balanceDonor').append($newdonInfo)
@@ -114,8 +127,6 @@ App = {
 
   selectPayment: async(paymentID) => {
     await App.charity.signPayment(paymentID, {from: App.account })
-    // selectedPaymentId = paymentID;
-    // App.addSign();
   },
 
   renderPayments: async () => {
