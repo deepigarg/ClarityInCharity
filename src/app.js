@@ -3,8 +3,8 @@ App = {
   contracts: {},
   selectedShopID:0,
   shopBalance:"",
-  selectedProjectId:0,
-  selectedPaymentId:0,
+  // selectedProjectId:0,
+  // selectedPaymentId:0,
 
   load: async () => {
     await App.loadWeb3()
@@ -16,7 +16,7 @@ App = {
   //#####################################################
   // METAMASK BIT STARTS
   //#####################################################
-  // https://medium.com/metamask/https-medium-com-metamask-breaking-change-injecting-web3-7722797916a8
+
   loadWeb3: async () => {
     if (typeof web3 !== 'undefined') {
       App.web3Provider = web3.currentProvider
@@ -157,30 +157,13 @@ App = {
           $newPmtTemplate.show()
         }
       }
-
-      
-      // const projectRequiredAmount = project[3].toNumber();
-      // const projectStatus = project[6];
-      // const projectShopNo = project[7].toNumber();
-      
-      // const url = "donate.html?id="
-      // $newTaskTemplate.find('#amt-to-give').attr("projectId",String(i))
-
-      // $newTaskTemplate.find('input')
-      //                 .prop('name', projectId)
-      //                 .prop('checked', projectStatus)
-      //                 .on('click', App.toggleCompleted)
-
-      // Put the task in the correct list
-
-      // Show the task
-      
     }
   },
 
-  sendmoney: async() => {
+  sendmoney: async(pmtId, donateAmt) => {
     // console.log(App.selectedPaymentId)
-    // await App.charity.sendMoney(App.selectedPaymentId, {from: App.account })
+    const ethers = 1000000000000000000*Number(donateAmt)
+    await App.charity.sendMoney(pmtId, {from: App.account, value: ethers})
   },
 
   renderTransactions: async() => {
@@ -215,24 +198,42 @@ App = {
         const donatedamt = pmt[4].toNumber();
         const signedbyproj = pmt[5];
 
-      if(signedbyproj==true){
-        const $newPayTemplate = $payTemplate.clone()
-        $newPayTemplate.find('.paymentId').html(pmtId)
-        $newPayTemplate.find('.projID').html(proID)
-        $newPayTemplate.find('.shopID').html(shopID)
-        $newPayTemplate.find('.amt').html(donatedamt)
+        if(signedbyproj==true){
+          const $newPayTemplate = $payTemplate.clone()
+          $newPayTemplate.find('.paymentId').html(pmtId)
+          $newPayTemplate.find('.projID').html(proID)
+          $newPayTemplate.find('.shopID').html(shopID)
+          $newPayTemplate.find('.amt').html(donatedamt)
 
-        // const funcCall = "App.selectPayment("
-        // const param = funcCall.concat(String(i))
-        // $newPayTemplate.find('.send-btn').attr("onclick",param.concat(")"))
+          const funcCall = "App.sendmoney("
+          const param = funcCall.concat(String(i))
+          const param2 = param.concat(",")
+          const param3 = param2.concat(String(donatedamt))
+          $newPayTemplate.find('.send-btn').attr("onclick",param3.concat(")"))
 
-        $('#payList').append($newPayTemplate)
-        $newPayTemplate.show()
-      }
+          $('#payList').append($newPayTemplate)
+          $newPayTemplate.show()
+        }
       }
       
     }
 
+  },
+
+  selectProject: async(projectID) => {
+    selectedProjectId = projectID;
+    App.startTransfer();
+  },
+
+  startTransfer: async()=>{
+    App.setLoading(true)
+
+    const amtToGive = $('#amttogive').val()
+    // const projectId = $('#amttogive').attr("projectId")
+    console.log("blalalalal",amtToGive)
+    console.log(selectedProjectId)
+    await App.charity.createPayment(selectedProjectId,amtToGive, {from: App.account })
+    window.location.reload()
   },
 
   renderTasks: async () => {
@@ -283,22 +284,6 @@ App = {
       // Show the task
       $newTaskTemplate.show()
     }
-  },
-
-  selectProject: async(projectID) => {
-    selectedProjectId = projectID;
-    App.startTransfer();
-  },
-
-  startTransfer: async()=>{
-    App.setLoading(true)
-
-    const amtToGive = $('#amttogive').val()
-    // const projectId = $('#amttogive').attr("projectId")
-    console.log("blalalalal",amtToGive)
-    console.log(selectedProjectId)
-    await App.charity.createPayment(selectedProjectId,amtToGive, {from: App.account })
-    window.location.reload()
   },
 
   showShopData: async () => {
