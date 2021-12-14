@@ -55,7 +55,7 @@
 
   <body>
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="http://www.dappuniversity.com/free-download" target="_blank">Clarity In Charity</a>
+      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="index.html">Clarity In Charity</a>
       <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap d-none d-sm-none d-sm-block">
           <small><a class="nav-link" href="#"><span id="account"></span></a></small>
@@ -70,8 +70,13 @@
             <p class="text-center">Loading...</p>
           </div>
           <div id="content">
+            <ul  id="balanceDonor">
+              <div class="donInfo" style="display: none;">
+                  <p>Your Account Balance: <span class="don-bal">Account balance</span></p>
+              </div>
+            </ul>
             <form>
-              <input id="amttogive" type="text" placeholder="Enter Amount" required>
+              <input id="amttogive" type="text" placeholder="Enter Amount in ETH" required>
               <!-- <input type="submit" class="transfer-button"> -->
             </form>
             <ul id="taskList" class="list-unstyled" style="padding: 10; display: flex; flex-wrap: wrap; justify-content: center;">

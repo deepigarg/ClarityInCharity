@@ -101,6 +101,7 @@ contract  ClarityInCharity{
       uint shopID;
       uint amount;
       bool signedByProject;
+      bool completed;
   }
 
   function createPayment(uint projectID, uint amt) public{
@@ -110,7 +111,8 @@ contract  ClarityInCharity{
         projID : projectID,
         shopID: projects[projectID].shopID,
         amount : amt,
-        signedByProject:false
+        signedByProject:false,
+        completed : false
         });
     Project storage pro = projects[projectID];
     pro.balance+=amt;
@@ -132,6 +134,7 @@ contract  ClarityInCharity{
     address payable addr = shops[pay.shopID].Address;
     addr.transfer(msg.value);
     shops[pay.shopID].project_payments[pay.projID]+=msg.value;
+    payments[paymentID].completed = true;
   }
 }
 
