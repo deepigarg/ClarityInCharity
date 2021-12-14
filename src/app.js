@@ -66,7 +66,7 @@ App = {
 
   loadContract: async () => {
     // Create a JavaScript version of the smart contract
-    const charity = await $.getJSON('ClarityInCharity.json')
+    const charity = await $.getJSON('../build/contracts/ClarityInCharity.json')
 
     // console.log(charity)
     App.contracts.Charity = TruffleContract(charity)
