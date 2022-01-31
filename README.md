@@ -1,12 +1,18 @@
 # ClarityInCharity
-A blockchain based charity application
+A charity application based on Blockchain.
 
-npm run dev
+## Requirements
 
-TO DO:
-- Error in sign Transaction by project -- done
-- Complete logic for "send money" -- done
-- Improve UI
-- while diplaying projects to donor, add condition to check for project balance=reqd amt -- done
-- Show balance of donor while entering amount (taaki aukat mein rahe) -- done
-- remove transaction after donor payments -- done
+1. Ganache
+2. npm
+3. Truffle suite
+4. Metamask
+
+## To run the application
+
+1. Clone the repository and cd into the folder.
+2. run `npm install`
+3. Open Ganache and start a test blockchain
+4. run `truffle compile`
+5. run `truffle migrate`
+6. run `npm run dev`
